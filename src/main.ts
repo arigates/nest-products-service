@@ -1,14 +1,12 @@
 import { NestFactory } from '@nestjs/core';
-import { Transport, MicroserviceOptions } from '@nestjs/microservices';
+import { ConfigService } from '@nestjs/config';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
-    AppModule,
-    {
-      transport: Transport.TCP,
-    },
-  );
-  app.listen();
+  const app: NestExpressApplication = await NestFactory.create(AppModule);
+  const config = app.get(ConfigService);
+  const port: number = config.get<number>('PORT');
+  await app.listen(port);
 }
 bootstrap();
