@@ -1,6 +1,7 @@
 import {
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -23,12 +24,12 @@ export class Product {
   @Column({ type: 'varchar', length: 25, default: 'active' })
   public status: string;
 
-  @CreateDateColumn({ type: 'timestamp' })
+  @CreateDateColumn()
   public createdAt!: Date;
 
-  @UpdateDateColumn({ type: 'timestamp' })
+  @UpdateDateColumn()
   public updatedAt!: Date;
 
-  @UpdateDateColumn({ type: 'timestamp', nullable: true })
+  @DeleteDateColumn()
   public deletedAt!: Date | null;
 }
