@@ -1,18 +1,24 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
 import { Repository } from 'typeorm';
+import { ClientProxy } from '@nestjs/microservices';
 
 @Injectable()
 export class ProductsService {
   @InjectRepository(Product)
   private readonly repository: Repository<Product>;
 
+  constructor(@Inject('PRODUCT_SERVICE') private productClient: ClientProxy) {}
+
   async create(createProductDto: CreateProductDto) {
     const product: Product = await this.repository.create(createProductDto);
     await this.repository.save(product);
+
+    await this.productClient.connect();
+    this.productClient.emit('product-created', product);
 
     return product;
   }
