@@ -12,7 +12,7 @@ import { GlobalModule } from './global.module';
     GlobalModule,
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRootAsync({ useClass: TypeOrmConfigService }),
-    ProductsModule,
+    ProductsModule
   ],
   controllers: [AppController],
   providers: [AppService],

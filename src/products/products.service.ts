@@ -11,14 +11,14 @@ export class ProductsService {
   @InjectRepository(Product)
   private readonly repository: Repository<Product>;
 
-  constructor(@Inject('PRODUCT_SERVICE') private productClient: ClientProxy) {}
+  constructor(@Inject('PRODUCT_SERVICE') private clientProxy: ClientProxy) {}
 
   async create(createProductDto: CreateProductDto) {
     const product: Product = await this.repository.create(createProductDto);
     await this.repository.save(product);
 
-    await this.productClient.connect();
-    this.productClient.emit('product-created', product);
+    await this.clientProxy.connect();
+    this.clientProxy.emit('product-created', product);
 
     return product;
   }
@@ -61,5 +61,15 @@ export class ProductsService {
     }
 
     return this.repository.softDelete(id);
+  }
+
+  async updateRating(id: string, ratting: number) {
+    const product: Product = await this.repository.findOne(id);
+
+    if (!product) {
+      return false;
+    }
+
+    await this.repository.update(id, { rating: ratting });
   }
 }

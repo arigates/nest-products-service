@@ -24,6 +24,9 @@ export class Product {
   @Column({ type: 'varchar', length: 25, default: 'active' })
   public status: string;
 
+  @Column({ type: 'decimal', precision: 6, scale: 2, default: 0 })
+  public rating: number;
+
   @CreateDateColumn()
   public createdAt!: Date;
 
