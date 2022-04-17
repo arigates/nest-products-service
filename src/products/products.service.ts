@@ -14,7 +14,7 @@ export class ProductsService {
   constructor(@Inject('PRODUCT_SERVICE') private clientProxy: ClientProxy) {}
 
   async create(createProductDto: CreateProductDto) {
-    const product: Product = await this.repository.create(createProductDto);
+    const product: Product = this.repository.create(createProductDto);
     await this.repository.save(product);
 
     await this.clientProxy.connect();

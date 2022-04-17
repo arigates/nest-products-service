@@ -16,7 +16,7 @@ export class AppController {
   }
 
   @EventPattern('product-rating-updated')
-  async handleProductCreate(data) {
+  async handleProductCreate(data: { productId: string; rating: string | number; }) {
     console.log(data);
     await this.productsService.updateRating(data.productId, +data.rating);
   }
