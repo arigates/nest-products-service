@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
-import { EventPattern } from '@nestjs/microservices';
+import { Ctx, EventPattern, Payload, RmqContext } from '@nestjs/microservices';
 import { ProductsService } from './products/products.service';
 
 @Controller()
@@ -16,8 +16,9 @@ export class AppController {
   }
 
   @EventPattern('product-rating-updated')
-  async handleProductCreate(data: { productId: string; rating: string | number; }) {
+  async handleProductCreate(@Payload() data: string, @Ctx() context: RmqContext) {
     console.log(data);
-    await this.productsService.updateRating(data.productId, +data.rating);
+    const param: any = JSON.parse(data);
+    await this.productsService.updateRating(param.productId, +param.rating);
   }
 }

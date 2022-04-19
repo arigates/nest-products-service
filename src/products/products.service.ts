@@ -18,7 +18,7 @@ export class ProductsService {
     await this.repository.save(product);
 
     await this.clientProxy.connect();
-    this.clientProxy.emit('product-created', product);
+    this.clientProxy.emit('product-created', JSON.stringify(product));
 
     return product;
   }
